@@ -38,8 +38,9 @@ If risk flags (self-harm, harm to others, acute crisis) appear, urge contacting 
     });
 
     if (!r.ok) {
-      const text = await r.text();
-      return res.status(500).json({ error: "OpenAI error", detail: text });
+  const text = await r.text();
+  console.error("OpenAI error:", text);
+  return res.status(500).json({ error: text });
     }
 
     const data = await r.json();
