@@ -1,0 +1,70 @@
+// Point this to your real backend:
+const SEND_URL = "/api/chat"; // e.g. "https://your-render-service.onrender.com/api/chat"
+
+const messagesEl = document.getElementById("messages");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("sendBtn");
+
+// Keep a simple message history if your backend expects it
+const state = [
+  { role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }
+];
+
+function addMessage(role, text) {
+  const row = document.createElement("div");
+  row.className = "message " + (role === "user" ? "user" : "bot");
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+
+  row.appendChild(bubble);
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+// Greet once
+addMessage("bot", "Hey — what’s on your mind today?");
+
+async function sendMessage() {
+  const text = (input.value || "").trim();
+  if (!text) return;
+
+  // Show user message immediately and clear input
+  addMessage("user", text);
+  state.push({ role: "user", content: text });
+  input.value = "";
+
+  try {
+    const res = await fetch(SEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: state })
+    });
+
+    // Handle non-200s
+    if (!res.ok) {
+      addMessage("bot", "I couldn’t reach the server. Try again in a bit.");
+      return;
+    }
+
+    const data = await res.json().catch(() => ({}));
+    const reply = data.reply || "Sorry, I don’t have a reply right now.";
+    addMessage("bot", reply);
+    state.push({ role: "assistant", content: reply });
+  } catch (err) {
+    console.error(err);
+    addMessage("bot", "Network issue. Please try again.");
+  }
+}
+
+// Click send
+sendBtn.addEventListener("click", sendMessage);
+
+// Press Enter inside the input also sends (without reloading)
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
