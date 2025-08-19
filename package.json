@@ -1,14 +1,14 @@
 {
-  "name": "calmnest-ai",
-  "version": "0.1.0",
-  "private": true,
+  "name": "calmnest",
   "type": "module",
   "scripts": {
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.19.2",
-    "node-fetch": "^3.3.2"
+    "openai": "^4.52.0"
   }
 }
