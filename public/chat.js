@@ -1,11 +1,11 @@
-// Point this to your real backend:
-const SEND_URL = "/api/chat"; // e.g. "https://your-render-service.onrender.com/api/chat"
+const SEND_URL = "http://calmnest-ai.onrender.com";
 
+// ==== Elements ====
 const messagesEl = document.getElementById("messages");
 const input = document.getElementById("input");
 const sendBtn = document.getElementById("sendBtn");
 
-// Keep a simple message history if your backend expects it
+// Simple history for context
 const state = [
   { role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }
 ];
@@ -21,20 +21,40 @@ function addMessage(role, text) {
   row.appendChild(bubble);
   messagesEl.appendChild(row);
   messagesEl.scrollTop = messagesEl.scrollHeight;
+  return row;
 }
 
-// Greet once
+// Typing indicator
+let typingEl = null;
+function showTyping() {
+  typingEl = document.createElement("div");
+  typingEl.className = "message bot";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  const dots = document.createElement("div");
+  dots.className = "typing";
+  dots.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  bubble.appendChild(dots);
+  typingEl.appendChild(bubble);
+  messagesEl.appendChild(typingEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+function hideTyping() {
+  if (typingEl) { typingEl.remove(); typingEl = null; }
+}
+
+// Greeting
 addMessage("bot", "Hey — what’s on your mind today?");
 
 async function sendMessage() {
   const text = (input.value || "").trim();
   if (!text) return;
 
-  // Show user message immediately and clear input
   addMessage("user", text);
   state.push({ role: "user", content: text });
   input.value = "";
 
+  showTyping();
   try {
     const res = await fetch(SEND_URL, {
       method: "POST",
@@ -42,26 +62,26 @@ async function sendMessage() {
       body: JSON.stringify({ messages: state })
     });
 
-    // Handle non-200s
     if (!res.ok) {
+      hideTyping();
       addMessage("bot", "I couldn’t reach the server. Try again in a bit.");
       return;
     }
 
     const data = await res.json().catch(() => ({}));
     const reply = data.reply || "Sorry, I don’t have a reply right now.";
+    hideTyping();
     addMessage("bot", reply);
     state.push({ role: "assistant", content: reply });
   } catch (err) {
     console.error(err);
+    hideTyping();
     addMessage("bot", "Network issue. Please try again.");
   }
 }
 
-// Click send
+// Click + Enter to send
 sendBtn.addEventListener("click", sendMessage);
-
-// Press Enter inside the input also sends (without reloading)
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
