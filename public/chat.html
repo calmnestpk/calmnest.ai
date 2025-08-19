@@ -8,7 +8,7 @@
   </head>
   <body class="bg-sky">
     <header class="topbar">
-      <a href="/index.htm" class="brand">
+      <a href="/index.html" class="brand">
         <img src="/logo.png" alt="CalmNest" class="brand-logo" />
         <span>CalmNest</span>
       </a>
@@ -24,14 +24,10 @@
           </div>
         </header>
 
-        <!-- Messages -->
         <div id="messages" class="messages" aria-live="polite"></div>
 
-        <!-- Composer -->
-        <!-- onsubmit prevents page refresh if Enter is pressed -->
         <form id="composer" class="composer" onsubmit="return false" autocomplete="off">
           <input id="input" class="input" type="text" placeholder="Type how you're feeling…" maxlength="2000" />
-          <!-- type='button' avoids form submit -->
           <button id="sendBtn" class="btn primary" type="button">Send</button>
         </form>
       </section>
