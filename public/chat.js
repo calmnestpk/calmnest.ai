@@ -1,11 +1,10 @@
-const SEND_URL = "http://calmnest-ai.onrender.com";
+// Frontend talks to the SAME domain (your Node service), no CORS needed
+const SEND_URL = "/api/chat";
 
-// ==== Elements ====
 const messagesEl = document.getElementById("messages");
 const input = document.getElementById("input");
 const sendBtn = document.getElementById("sendBtn");
 
-// Simple history for context
 const state = [
   { role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }
 ];
@@ -80,7 +79,6 @@ async function sendMessage() {
   }
 }
 
-// Click + Enter to send
 sendBtn.addEventListener("click", sendMessage);
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
