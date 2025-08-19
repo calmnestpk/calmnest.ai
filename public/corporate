@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CalmNest — For Organizations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="bg-sky">
+    <header class="topbar">
+      <a href="/" class="brand">
+        <img src="/logo.png" alt="CalmNest" class="brand-logo" />
+        <span>CalmNest</span>
+      </a>
+      <nav class="nav">
+        <a href="/chat.html" class="link">Personal Chat</a>
+      </nav>
+    </header>
+
+    <main class="center narrow">
+      <section class="card big">
+        <h1>Wellbeing that actually gets used</h1>
+        <p class="lead">AI-first support for teams, with real therapists as a safety net. Slack-native, privacy-respectful, and configurable to your culture.</p>
+        <ul class="bullets">
+          <li>Slack integration and SSO</li>
+          <li>Custom playbooks and escalation</li>
+          <li>Monthly insights without PII</li>
+        </ul>
+        <div class="buttons">
+          <a class="btn primary" href="mailto:hello@calmnest.ai?subject=CalmNest%20Corporate%20Inquiry">Contact Sales</a>
+          <a class="btn ghost" href="#demo" onclick="alert('Demo booking coming soon.')">Book a demo</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
