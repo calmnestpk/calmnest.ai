@@ -1,70 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalmNest</title>
-  <style>
-    body {
-      background-color: #b2ebf2;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: sans-serif;
-    }
-    .logo-container {
-      animation: bounce 1.5s infinite;
-      cursor: pointer;
-    }
-    @keyframes bounce {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-15px);
-      }
-    }
-    .options {
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      margin-top: 30px;
-    }
-    .option-btn {
-      background: white;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 10px;
-      font-size: 1.2em;
-      cursor: pointer;
-    }
-    .italic {
-      font-style: italic;
-    }
-  </style>
-</head>
-<body>
-  <div class="logo-container" onclick="showOptions()">
-    <img src="calmnest-logo.png" alt="CalmNest Logo" width="200" />
-  </div>
-
-  <div class="options" id="options">
-    <button class="option-btn italic" onclick="alert('Beta Chat Opening...')">I wanna talk about myself</button>
-    <button class="option-btn" onclick="showCorporate()">Corporate</button>
-  </div>
-
-  <script>
-    function showOptions() {
-      document.querySelector('.logo-container').style.display = 'none';
-      document.getElementById('options').style.display = 'flex';
-    }
-
-    function showCorporate() {
-      alert("Slack Integration, Custom Fine-Tuning and Sales Contact Portal Coming Soon...");
-    }
-  </script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CalmNest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="bg-sky">
+    <main class="center stage">
+      <img src="/logo.png" alt="CalmNest" class="logo-bounce" />
+      <div class="card">
+        <h1>How can we help today?</h1>
+        <div class="buttons">
+          <a class="btn primary italic" href="/chat.html">I wanna talk about myself</a>
+          <a class="btn ghost" href="/corporate.html">Corporate</a>
+        </div>
+        <p class="hint">Tap an option to continue</p>
+      </div>
+    </main>
+    <footer class="foot">© <span id="year"></span> CalmNest</footer>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
 </html>
