@@ -24,14 +24,14 @@
           </div>
         </header>
 
-        <!-- Messages list -->
+        <!-- Messages -->
         <div id="messages" class="messages" aria-live="polite"></div>
 
         <!-- Composer -->
-        <!-- onsubmit='return false' prevents page reload if Enter is pressed -->
+        <!-- onsubmit prevents page refresh if Enter is pressed -->
         <form id="composer" class="composer" onsubmit="return false" autocomplete="off">
           <input id="input" class="input" type="text" placeholder="Type how you're feeling…" maxlength="2000" />
-          <!-- type='button' guarantees no form submit/page refresh -->
+          <!-- type='button' avoids form submit -->
           <button id="sendBtn" class="btn primary" type="button">Send</button>
         </form>
       </section>
