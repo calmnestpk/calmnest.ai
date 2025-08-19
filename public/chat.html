@@ -4,20 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>CalmNest — Chat</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body class="bg-sky">
     <header class="topbar">
-      <a href="/" class="brand">
+      <a href="/index.htm" class="brand">
         <img src="/logo.png" alt="CalmNest" class="brand-logo" />
         <span>CalmNest</span>
       </a>
-      <nav class="nav">
-        <a href="/corporate.html" class="link">Corporate</a>
-      </nav>
     </header>
 
     <main class="chat-shell">
@@ -29,10 +23,16 @@
             <p class="sub">Private, AI-guided conversation</p>
           </div>
         </header>
+
+        <!-- Messages list -->
         <div id="messages" class="messages" aria-live="polite"></div>
-        <form id="composer" class="composer" autocomplete="off">
-          <input id="input" class="input" type="text" placeholder="Type how you're feeling…" maxlength="2000" required />
-          <button class="btn primary" type="submit">Send</button>
+
+        <!-- Composer -->
+        <!-- onsubmit='return false' prevents page reload if Enter is pressed -->
+        <form id="composer" class="composer" onsubmit="return false" autocomplete="off">
+          <input id="input" class="input" type="text" placeholder="Type how you're feeling…" maxlength="2000" />
+          <!-- type='button' guarantees no form submit/page refresh -->
+          <button id="sendBtn" class="btn primary" type="button">Send</button>
         </form>
       </section>
     </main>
