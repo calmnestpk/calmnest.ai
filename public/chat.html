@@ -1,79 +1,42 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CalmNest AI</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin:0; background:#0b0f14; color:#e7edf3; }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 24px; }
-    .card { background:#121821; border:1px solid #1f2a36; border-radius:16px; padding:16px; }
-    .messages { height: 60vh; overflow:auto; padding:8px; display:flex; flex-direction:column; gap:12px; }
-    .bubble { padding:12px 14px; border-radius:12px; line-height:1.4 }
-    .user { background:#1c2836; align-self:flex-end; }
-    .bot { background:#17212b; align-self:flex-start; }
-    .row { display:flex; gap:8px; margin-top:12px; }
-    textarea { flex:1; padding:12px; border-radius:10px; border:1px solid #233042; background:#0e141b; color:#e7edf3; resize:vertical; min-height:54px }
-    button { padding:12px 16px; border-radius:10px; border:1px solid #2a3a4f; background:#1a2634; color:#e7edf3; cursor:pointer }
-    button:disabled { opacity:.6; cursor:not-allowed }
-    h1 { margin:0 0 12px 0; font-size:20px }
-    .foot { opacity:.6; font-size:12px; margin-top:8px }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="card">
-      <h1>CalmNest AI</h1>
-      <div id="messages" class="messages"></div>
-      <div class="row">
-        <textarea id="input" placeholder="Ask about stress, sleep, focus..."></textarea>
-        <button id="send">Send</button>
-      </div>
-      <div class="foot">Early preview. Educational guidance only.</div>
-    </div>
-  </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CalmNest — Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="bg-sky">
+    <header class="topbar">
+      <a href="/" class="brand">
+        <img src="/logo.png" alt="CalmNest" class="brand-logo" />
+        <span>CalmNest</span>
+      </a>
+      <nav class="nav">
+        <a href="/corporate.html" class="link">Corporate</a>
+      </nav>
+    </header>
 
-  <script>
-    const elMsgs = document.getElementById("messages");
-    const elInput = document.getElementById("input");
-    const elSend = document.getElementById("send");
+    <main class="chat-shell">
+      <section class="chat-card">
+        <header class="chat-head">
+          <div class="avatar">CN</div>
+          <div>
+            <h2>Personal Support</h2>
+            <p class="sub">Private, AI-guided conversation</p>
+          </div>
+        </header>
+        <div id="messages" class="messages" aria-live="polite"></div>
+        <form id="composer" class="composer" autocomplete="off">
+          <input id="input" class="input" type="text" placeholder="Type how you're feeling…" maxlength="2000" required />
+          <button class="btn primary" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
 
-    function addBubble(text, who) {
-      const div = document.createElement("div");
-      div.className = "bubble " + (who === "user" ? "user" : "bot");
-      div.textContent = text;
-      elMsgs.appendChild(div);
-      elMsgs.scrollTop = elMsgs.scrollHeight;
-    }
-
-    async function send() {
-      const msg = elInput.value.trim();
-      if (!msg) return;
-      addBubble(msg, "user");
-      elInput.value = "";
-      elInput.disabled = true; elSend.disabled = true;
-
-      try {
-        const r = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: msg })
-        });
-        const data = await r.json();
-        addBubble(data.reply || "Sorry, no reply.", "bot");
-      } catch (e) {
-        addBubble("Error talking to server.", "bot");
-      } finally {
-        elInput.disabled = false; elSend.disabled = false; elInput.focus();
-      }
-    }
-
-    elSend.addEventListener("click", send);
-    elInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
-    });
-
-    addBubble("Hey — how can I help you today?", "bot");
-  </script>
-</body>
+    <script src="/chat.js"></script>
+  </body>
 </html>
