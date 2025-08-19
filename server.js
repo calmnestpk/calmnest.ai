@@ -1,57 +1,52 @@
+// server.js
 import express from "express";
-import cors from "cors";
-import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
+import OpenAI from "openai";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // set this on Render
+// 1) Serve static files from /public
+const PUBLIC_DIR = path.join(__dirname, "public");
+app.use(express.static(PUBLIC_DIR));
+
+// Optional: explicit root to index.html
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+});
+
+// 2) Chat API using OPENAI_API_KEY from Render env
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post("/api/chat", async (req, res) => {
   try {
-    const userMessage = String(req.body.message || "").trim();
-    if (!userMessage) return res.status(400).json({ error: "No message provided" });
+    const messages = Array.isArray(req.body?.messages) ? req.body.messages : [];
 
-    const systemPrompt = `
-You are CalmNest AI, a warm, evidence-based workplace wellness guide.
-Be concise, practical, and human. Offer small, doable steps. Avoid medical diagnosis.
-If risk flags (self-harm, harm to others, acute crisis) appear, urge contacting local emergency services and provide general crisis resources.
-    `.trim();
+    const hasSystem = messages.some(m => m.role === "system");
+    const finalMessages = hasSystem
+      ? messages
+      : [{ role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }, ...messages];
 
-    const r = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userMessage }
-        ],
-        temperature: 0.7
-      })
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: finalMessages,
+      temperature: 0.7
     });
 
-    if (!r.ok) {
-  const text = await r.text();
-  console.error("OpenAI error:", text);
-  return res.status(500).json({ error: text });
-    }
+    const reply =
+      completion.choices?.[0]?.message?.content?.trim() ||
+      "Sorry, I don’t have a reply right now.";
 
-    const data = await r.json();
-    const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn’t generate a response.";
     res.json({ reply });
   } catch (err) {
-    res.status(500).json({ error: "Server error", detail: String(err) });
+    console.error("OpenAI error:", err);
+    res.status(500).json({ reply: "Server error talking to the AI." });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`CalmNest AI running on http://localhost:${PORT}`);
-});
+const port = process.env.PORT || 8080;
+app.listen(port, () => console.log(`CalmNest running on ${port}`));
