@@ -1,6 +1,8 @@
-/* Base */
+/* ==== Theme (set this to logo blue) ==== */
+/* Swap --sky-base to your exact CalmNest logo light-blue hex if different */
 :root {
-  --sky: #e7f3ff;
+  --sky-base: #cfe9ff;      /* <- light blue base (tweak to your exact brand) */
+  --sky: #e7f3ff;           /* gradient blend color */
   --ink: #0f172a;
   --muted: #475569;
   --brand: #4f9ef7;
@@ -15,7 +17,11 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--ink); }
 
 /* Layout */
-.bg-sky { background: radial-gradient(1200px 800px at 20% 10%, #f3f9ff, var(--sky)); min-height: 100vh; }
+.bg-sky {
+  background:
+    radial-gradient(1200px 800px at 20% 10%, var(--sky), var(--sky-base));
+  min-height: 100vh;
+}
 .center { display: grid; place-items: center; min-height: calc(100vh - 60px); padding: 28px; }
 .center.narrow { max-width: 880px; margin: 0 auto; }
 .stage { gap: 18px; }
@@ -64,6 +70,15 @@ body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto
 .message.user { justify-content: flex-end; }
 .message.user .bubble { background: #f1f6ff; }
 .message.bot .bubble { background: #ffffff; }
+
+/* Markdown inside bubbles */
+.bubble p { margin: 0 0 8px; line-height: 1.6; }
+.bubble strong { font-weight: 600; }
+.bubble ul, .bubble ol { margin: 8px 0; padding-left: 20px; }
+.bubble li { margin: 4px 0; }
+.bubble h1, .bubble h2, .bubble h3 { margin: 10px 0 6px; font-weight: 600; font-size: 1rem; }
+
+/* Composer */
 .composer { display: flex; gap: 10px; padding: 12px; border-top: 1px solid rgba(8,60,111,0.06); }
 .input { flex: 1; padding: 12px 14px; border-radius: 12px; border: 1px solid #d8e7fb; outline: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 0 0 0 var(--ring); transition: box-shadow .2s ease, border-color .2s ease; }
 .input:focus { border-color: #b8d3f7; box-shadow: 0 0 0 4px var(--ring); }
