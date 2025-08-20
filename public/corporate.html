@@ -1,59 +1,34 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CalmNest for Organizations</title>
-  <link rel="stylesheet" href="/styles.css?v=6" />
-</head>
-<body class="bg">
-  <header class="topbar">
-    <a class="back" href="/index.html">←</a>
-    <h1>CalmNest for Organizations</h1>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CalmNest — For Organizations</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/theme.js" defer></script>
+  </head>
+  <body class="bg-sky">
+    <header class="topbar">
+      <a href="/index.html" class="brand">
+        <img src="/logo.png" alt="CalmNest" class="brand-logo" />
+        <span>CalmNest</span>
+      </a>
+    </header>
 
-  <section class="corp-hero">
-    <p>Private, AI-guided mental health support that lives where your teams work — Slack, Microsoft Teams, and email — with clinicians in the loop when it matters.</p>
-  </section>
-
-  <section class="corp-grid">
-    <div>
-      <h3>How it works</h3>
-      <ul>
-        <li><strong>Fast access:</strong> Employees open CalmNest in Slack/Teams, describe what’s going on, and get actionable guidance in minutes.</li>
-        <li><strong>Personalized playbooks:</strong> Brief, practical steps for stress, sleep, conflict, focus, and burnout.</li>
-        <li><strong>Human escalation:</strong> With consent, cases can route to your EAP, in-house wellbeing team, or CalmNest clinicians.</li>
-      </ul>
-    </div>
-    <div>
-      <h3>Why orgs use us</h3>
-      <ul>
-        <li><strong>Confidential by design:</strong> Individual chats stay private. Orgs only see anonymized utilization trends.</li>
-        <li><strong>Zero heavy lift:</strong> Deploy in a day, no new logins. SSO supported.</li>
-        <li><strong>Measurable outcomes:</strong> NPS and quick check-ins to track impact over time.</li>
-      </ul>
-    </div>
-    <div>
-      <h3>Security & compliance</h3>
-      <ul>
-        <li><strong>Data controls:</strong> Region pinning, retention windows, and audit logs.</li>
-        <li><strong>Standards:</strong> Encryption in transit/at rest, least-privilege access, DPA available.</li>
-        <li><strong>Privacy:</strong> No employer access to individual conversations.</li>
-      </ul>
-    </div>
-    <div>
-      <h3>Rollout options</h3>
-      <ul>
-        <li>Pilot with one team (50–200 people)</li>
-        <li>Company-wide with custom playbooks and escalation rules</li>
-        <li>Quarterly insights: anonymized trends and recommendations</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="corp-cta">
-    <h2>Bring CalmNest to your team</h2>
-    <p>Questions, pricing, or a quick demo? Email <a href="mailto:sales@calmnest.ai">sales@calmnest.ai</a>.</p>
-  </section>
-</body>
+    <main class="center narrow">
+      <section class="card big">
+        <h1>Wellbeing that actually gets used</h1>
+        <p class="lead">AI-first support for teams, with real therapists as a safety net. Slack-native, privacy-respectful, and configurable to your culture.</p>
+        <ul class="bullets">
+          <li>Slack integration and SSO</li>
+          <li>Custom playbooks and escalation</li>
+          <li>Monthly insights without PII</li>
+        </ul>
+        <div class="buttons">
+          <a class="btn primary" href="mailto:hello@calmnest.ai?subject=CalmNest%20Corporate%20Inquiry">Contact Sales</a>
+          <a class="btn ghost" href="#demo" onclick="alert('Demo booking coming soon.')">Book a demo</a>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>
