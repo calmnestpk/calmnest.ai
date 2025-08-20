@@ -1,7 +1,7 @@
-/* ==== Theme (CalmNest light blue) ==== */
+/* ==== Theme (CalmNest logo blue) ==== */
 :root {
-  --sky-base: #cfe9ff;      /* tweak to your exact brand blue if needed */
-  --sky: #e7f3ff;           /* gradient blend color */
+  --sky-base: #A7EBF8;      /* exact blue from your logo */
+  --sky: #D6EDF2;           /* lighter blend for the gradient */
   --ink: #0f172a;
   --muted: #475569;
   --brand: #4f9ef7;
@@ -18,14 +18,16 @@ body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--ink);
-  overscroll-behavior-y: none; /* prevent whole-page rubber band during chat scroll */
+  overscroll-behavior-y: none; /* stop whole-page bounce while chatting */
 }
 
-/* Layout */
+/* Background */
 .bg-sky {
   background: radial-gradient(1200px 800px at 20% 10%, var(--sky), var(--sky-base));
   min-height: 100vh;
 }
+
+/* Layout */
 .center { display: grid; place-items: center; min-height: calc(100vh - 60px); padding: 28px; }
 .center.narrow { max-width: 880px; margin: 0 auto; }
 .stage { gap: 18px; }
@@ -61,12 +63,12 @@ body {
 /* Corporate */
 .bullets { margin: 16px 0; padding-left: 18px; color: var(--muted); }
 
-/* ===== Chat (updated: only messages scroll) ===== */
+/* ===== Chat (card fixed; only messages scroll) ===== */
 .chat-shell {
   display: flex;
   justify-content: center;
   padding: 24px;
-  min-height: calc(100svh - 60px); /* fill viewport minus topbar */
+  min-height: calc(100svh - 60px);
 }
 
 .chat-card {
@@ -76,7 +78,6 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 
-  /* keep header/composer fixed and let middle scroll */
   display: flex;
   flex-direction: column;
   height: clamp(560px, 78svh, 900px);
@@ -95,8 +96,8 @@ body {
 .messages {
   padding: 18px;
   overflow-y: auto;
-  flex: 1;              /* take remaining height */
-  min-height: 0;        /* allow flex child to shrink for proper overflow */
+  flex: 1;
+  min-height: 0;
   overscroll-behavior: contain;
 }
 
@@ -138,4 +139,3 @@ body {
 .typing .dot:nth-child(2) { animation-delay: .2s; }
 .typing .dot:nth-child(3) { animation-delay: .4s; }
 @keyframes blink { 0%, 80%, 100% { opacity: .3; } 40% { opacity: 1; } }
-
