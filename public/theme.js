@@ -1,4 +1,4 @@
-// Basic screen switching
+// Screen switching
 const screens = ["screen-landing", "screen-personal", "screen-corporate"];
 function show(id) {
   screens.forEach(s => document.getElementById(s).classList.remove("visible"));
@@ -8,7 +8,7 @@ document.getElementById("btn-personal").onclick = () => show("screen-personal");
 document.getElementById("btn-corporate").onclick = () => show("screen-corporate");
 document.querySelectorAll(".back").forEach(b => b.addEventListener("click", e => show(e.currentTarget.dataset.go)));
 
-// Chat basics (front-end only demo)
+// Chat demo + limit
 const MESSAGE_LIMIT = 30;
 const stream = document.getElementById("chat-stream");
 const input = document.getElementById("chat-input");
@@ -38,8 +38,7 @@ function updateMessageCountAndMaybeLock() {
       const note = document.createElement("div");
       note.id = "limit-note";
       note.className = "system-note";
-      note.innerHTML =
-        `You’ve reached today’s free support limit. For extended help, email <a href="mailto:help@calmnest.ai">help@calmnest.ai</a>.`;
+      note.innerHTML = `You’ve reached today’s free support limit. For extended help, email <a href="mailto:help@calmnest.ai">help@calmnest.ai</a>.`;
       stream.appendChild(note);
       openLimitModal();
       stream.scrollTop = stream.scrollHeight;
@@ -47,12 +46,8 @@ function updateMessageCountAndMaybeLock() {
   }
 }
 
-function openLimitModal() {
-  limitModal.classList.add("show");
-}
-function hideLimitModal() {
-  limitModal.classList.remove("show");
-}
+function openLimitModal() { limitModal.classList.add("show"); }
+function hideLimitModal() { limitModal.classList.remove("show"); }
 closeLimit.addEventListener("click", hideLimitModal);
 
 // Send button (mock reply)
