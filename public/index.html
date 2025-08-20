@@ -4,108 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CalmNest.ai</title>
-  <link rel="stylesheet" href="./styles.css?v=4" />
+  <link rel="stylesheet" href="/styles.css?v=6" />
 </head>
 <body class="bg">
-  <!-- Landing -->
-  <main id="screen-landing" class="screen visible">
-    <div class="landing-wrap">
-      <img src="calmnest-logo.png" alt="CalmNest" class="logo-bounce" />
-      <div class="landing-choices">
-        <button id="btn-personal" class="choice italic">I wanna talk about myself</button>
-        <button id="btn-corporate" class="choice">Corporate</button>
-      </div>
+  <main class="landing-wrap">
+    <img src="/logo.png" alt="CalmNest" class="logo-bounce" />
+    <div class="landing-choices">
+      <a class="choice italic" href="/chat.html">I wanna talk about myself</a>
+      <a class="choice" href="/corporate.html">Corporate</a>
     </div>
   </main>
-
-  <!-- Personal / Chat -->
-  <main id="screen-personal" class="screen">
-    <header class="topbar">
-      <button class="back" data-go="screen-landing">←</button>
-      <h1>calmnest.ai for individuals</h1>
-    </header>
-
-    <section class="chat-wrap">
-      <div id="chat-stream" class="chat-stream">
-        <div class="chat-message bot">
-          <div class="bubble">Hi! I’m CalmNest. Share what’s on your mind and I’ll guide you step by step.</div>
-        </div>
-      </div>
-
-      <div class="chat-input-row">
-        <input id="chat-input" placeholder="Type here…" />
-        <button id="send-btn">Send</button>
-      </div>
-      <p class="disclaimer">Not for emergencies. If you’re at risk, contact local emergency services.</p>
-    </section>
-
-    <!-- Limit modal (hidden by default even if CSS fails) -->
-    <div id="limit-modal" class="modal" style="display:none">
-      <div class="modal-card">
-        <h3>Limit reached</h3>
-        <p>You’ve reached today’s free support limit.</p>
-        <p>For extended help, email <a href="mailto:help@calmnest.ai">help@calmnest.ai</a>.</p>
-        <div class="row">
-          <a class="btn" href="mailto:help@calmnest.ai">Email support</a>
-          <button class="btn outline" id="close-limit">Close</button>
-        </div>
-        <p class="tiny">If you’re in immediate danger, call local emergency services.</p>
-      </div>
-    </div>
-  </main>
-
-  <!-- Corporate -->
-  <main id="screen-corporate" class="screen">
-    <header class="topbar">
-      <button class="back" data-go="screen-landing">←</button>
-      <h1>CalmNest for Organizations</h1>
-    </header>
-
-    <section class="corp-hero">
-      <p>Private, AI-guided mental health support that lives where your teams work — Slack, Microsoft Teams, and email — with clinicians in the loop when it matters.</p>
-    </section>
-
-    <section class="corp-grid">
-      <div>
-        <h3>How it works</h3>
-        <ul>
-          <li><strong>Fast access:</strong> Employees open CalmNest in Slack/Teams, describe what’s going on, and get actionable guidance in minutes.</li>
-          <li><strong>Personalized playbooks:</strong> Brief, practical steps for stress, sleep, conflict, focus, and burnout.</li>
-          <li><strong>Human escalation:</strong> With consent, cases can route to your EAP, in-house wellbeing team, or CalmNest clinicians.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Why orgs use us</h3>
-        <ul>
-          <li><strong>Confidential by design:</strong> Individual chats stay private. Orgs only see anonymized utilization trends.</li>
-          <li><strong>Zero heavy lift:</strong> Deploy in a day, no new logins. SSO supported.</li>
-          <li><strong>Measurable outcomes:</strong> NPS and quick check-ins to track impact over time.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Security & compliance</h3>
-        <ul>
-          <li><strong>Data controls:</strong> Region pinning, retention windows, and audit logs.</li>
-          <li><strong>Standards:</strong> Encryption in transit/at rest, least-privilege access, DPA available.</li>
-          <li><strong>Privacy:</strong> No employer access to individual conversations.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Rollout options</h3>
-        <ul>
-          <li>Pilot with one team (50–200 people)</li>
-          <li>Company-wide with custom playbooks and escalation rules</li>
-          <li>Quarterly insights: anonymized trends and recommendations</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="corp-cta">
-      <h2>Bring CalmNest to your team</h2>
-      <p>Questions, pricing, or a quick demo? Email <a href="mailto:sales@calmnest.ai">sales@calmnest.ai</a>.</p>
-    </section>
-  </main>
-
-  <script src="./theme.js"></script>
+  <script src="/theme.js"></script>
 </body>
 </html>
