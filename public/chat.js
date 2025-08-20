@@ -1,4 +1,4 @@
-// Talk to same-origin API
+// Frontend talks to same-origin API
 const SEND_URL = "/api/chat";
 
 const messagesEl = document.getElementById("messages");
@@ -6,14 +6,33 @@ const input = document.getElementById("input");
 const sendBtn = document.getElementById("sendBtn");
 
 const state = [
-  { role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }
+  // harmless placeholder; server injects the real system prompt
+  { role: "system", content: "User starts a wellness chat." }
 ];
 
-// Render Markdown safely (strip <script> and use Marked for structure)
+// --- Markdown helpers ---
+function normalizeMarkdown(md) {
+  let text = (md || "");
+
+  // Make numbered/bullet lists start at the line start so Markdown parses
+  text = text
+    .replace(/(\s|^)(\d+)\.\s/g, "\n$2. ") // numbered lists
+    .replace(/(\s|^)[*-]\s/g, "\n- ");     // dash/star bullets
+
+  // Convert lines like **Title** to headings
+  text = text.replace(/^\s*\*\*([^*]+)\*\*\s*$/gm, "### $1");
+
+  // Collapse extra blank lines
+  text = text.replace(/\n{3,}/g, "\n\n");
+
+  return text.trim();
+}
+
 function safeMarkdownToHtml(md) {
   const cleaned = (md || "").replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "");
-  // marked is loaded via CDN in chat.html
-  return marked.parse(cleaned, { breaks: true });
+  const normalized = normalizeMarkdown(cleaned);
+  // 'marked' is loaded in chat.html via CDN
+  return marked.parse(normalized, { breaks: true });
 }
 
 function addMessage(role, text) {
@@ -30,7 +49,7 @@ function addMessage(role, text) {
   return row;
 }
 
-// Typing indicator
+// --- Typing indicator ---
 let typingEl = null;
 function showTyping() {
   typingEl = document.createElement("div");
@@ -49,9 +68,10 @@ function hideTyping() {
   if (typingEl) { typingEl.remove(); typingEl = null; }
 }
 
-// Greeting
-addMessage("bot", "Hey — what’s on your mind today?");
+// Greet
+addMessage("bot", "### Quick support\n- What’s on your mind today?");
 
+// --- Send flow ---
 async function sendMessage() {
   const text = (input.value || "").trim();
   if (!text) return;
@@ -71,14 +91,14 @@ async function sendMessage() {
     if (!res.ok) throw new Error("Bad response");
 
     const data = await res.json().catch(() => ({}));
-    const reply = data.reply || "Sorry, I don’t have a reply right now.";
+    const reply = data.reply || "### Quick support\n- I couldn’t get a reply just now.";
     hideTyping();
     addMessage("bot", reply);
     state.push({ role: "assistant", content: reply });
   } catch (err) {
     console.error(err);
     hideTyping();
-    addMessage("bot", "I couldn’t reach the server. Try again in a bit.");
+    addMessage("bot", "### Quick support\n- I couldn’t reach the server. Try again in a bit.");
   }
 }
 
@@ -89,3 +109,4 @@ input.addEventListener("keydown", (e) => {
     sendMessage();
   }
 });
+
