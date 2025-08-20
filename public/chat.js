@@ -1,93 +1,45 @@
-const SEND_URL = "/api/chat";
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>calmnest.ai for individuals</title>
+  <link rel="stylesheet" href="/styles.css?v=6" />
+</head>
+<body class="bg">
+  <header class="topbar">
+    <a class="back" href="/index.html">←</a>
+    <h1>calmnest.ai for individuals</h1>
+  </header>
 
-const messagesEl = document.getElementById("messages");
-const input = document.getElementById("input");
-const sendBtn = document.getElementById("sendBtn");
+  <section class="chat-wrap">
+    <div id="chat-stream" class="chat-stream">
+      <div class="chat-message bot">
+        <div class="bubble">Hi! I’m CalmNest. Share what’s on your mind and I’ll guide you step by step.</div>
+      </div>
+    </div>
 
-const state = [
-  { role: "system", content: "User starts a wellness chat." } // server injects the real system prompt
-];
+    <div class="chat-input-row">
+      <input id="chat-input" placeholder="Type here…" />
+      <button id="send-btn">Send</button>
+    </div>
+    <p class="disclaimer">Not for emergencies. If you’re at risk, contact local emergency services.</p>
+  </section>
 
-// --- Markdown helpers ---
-function normalizeMarkdown(md) {
-  let text = (md || "");
-  text = text
-    .replace(/(\s|^)(\d+)\.\s/g, "\n$2. ")
-    .replace(/(\s|^)[*-]\s/g, "\n- ");
-  text = text.replace(/^\s*\*\*([^*]+)\*\*\s*$/gm, "### $1");
-  text = text.replace(/\n{3,}/g, "\n\n");
-  return text.trim();
-}
-function safeMarkdownToHtml(md) {
-  const cleaned = (md || "").replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "");
-  const normalized = normalizeMarkdown(cleaned);
-  return marked.parse(normalized, { breaks: true });
-}
+  <!-- Limit modal (hidden by default) -->
+  <div id="limit-modal" class="modal" style="display:none">
+    <div class="modal-card">
+      <h3>Limit reached</h3>
+      <p>You’ve reached today’s free support limit.</p>
+      <p>For extended help, email <a href="mailto:help@calmnest.ai">help@calmnest.ai</a>.</p>
+      <div class="row">
+        <a class="btn" href="mailto:help@calmnest.ai">Email support</a>
+        <button class="btn outline" id="close-limit">Close</button>
+      </div>
+      <p class="tiny">If you’re in immediate danger, call local emergency services.</p>
+    </div>
+  </div>
 
-function addMessage(role, text) {
-  const row = document.createElement("div");
-  row.className = "message " + (role === "user" ? "user" : "bot");
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.innerHTML = safeMarkdownToHtml(text);
-  row.appendChild(bubble);
-  messagesEl.appendChild(row);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-  return row;
-}
-
-// Typing indicator
-let typingEl = null;
-function showTyping() {
-  typingEl = document.createElement("div");
-  typingEl.className = "message bot";
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  const dots = document.createElement("div");
-  dots.className = "typing";
-  dots.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
-  bubble.appendChild(dots);
-  typingEl.appendChild(bubble);
-  messagesEl.appendChild(typingEl);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-function hideTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
-
-// Greeting
-addMessage("bot", "### calmnest.ai\n- What’s on your mind today?");
-
-// Send flow
-async function sendMessage() {
-  const text = (input.value || "").trim();
-  if (!text) return;
-
-  addMessage("user", text);
-  state.push({ role: "user", content: text });
-  input.value = "";
-
-  showTyping();
-  try {
-    const res = await fetch(SEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: state })
-    });
-
-    if (!res.ok) throw new Error("Bad response");
-
-    const data = await res.json().catch(() => ({}));
-    const reply = data.reply || "### calmnest.ai\n- I couldn’t get a reply just now.";
-    hideTyping();
-    addMessage("bot", reply);
-    state.push({ role: "assistant", content: reply });
-  } catch (err) {
-    console.error(err);
-    hideTyping();
-    addMessage("bot", "### calmnest.ai\n- I couldn’t reach the server. Try again in a bit.");
-  }
-}
-
-sendBtn.addEventListener("click", sendMessage);
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") { e.preventDefault(); sendMessage(); }
-});
+  <script src="/chat.js?v=6"></script>
+</body>
+</html>
