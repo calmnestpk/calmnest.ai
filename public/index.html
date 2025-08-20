@@ -3,39 +3,24 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>CalmNest — Chat</title>
+    <title>CalmNest</title>
     <link rel="stylesheet" href="/styles.css" />
-    <script src="/theme.js" defer></script>
   </head>
   <body class="bg-sky">
-    <header class="topbar">
-      <a href="/index.html" class="brand">
-        <img src="/logo.png" alt="CalmNest" class="brand-logo" />
-        <span>CalmNest</span>
-      </a>
-    </header>
-
-    <main class="chat-shell">
-      <section class="chat-card">
-        <header class="chat-head">
-          <div class="avatar">CN</div>
-          <div>
-            <h2>CalmNest.ai for Individuals</h2>
-            <p class="sub">Private, AI-guided conversation</p>
-          </div>
-        </header>
-
-        <div id="messages" class="messages" aria-live="polite"></div>
-
-        <form id="composer" class="composer" onsubmit="return false" autocomplete="off">
-          <input id="input" class="input" type="text" placeholder="Type how you're feeling…" maxlength="2000" />
-          <button id="sendBtn" class="btn primary" type="button">Send</button>
-        </form>
-      </section>
+    <main class="center stage">
+      <img src="/logo.png" alt="CalmNest" class="logo-bounce" />
+      <div class="card">
+        <h1>How can we help today?</h1>
+        <div class="buttons">
+          <a class="btn primary italic" href="/chat.html">I wanna talk about myself</a>
+          <a class="btn ghost" href="/corporate.html">Corporate</a>
+        </div>
+        <p class="hint">Tap an option to continue</p>
+      </div>
     </main>
-
-    <!-- Markdown parser (for headings/bullets) -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="/chat.js"></script>
+    <footer class="foot">© <span id="year"></span> CalmNest</footer>
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
