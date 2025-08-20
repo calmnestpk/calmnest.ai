@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -9,30 +10,26 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 
-// Serve /public
+// 1) Serve static files from /public
 const PUBLIC_DIR = path.join(__dirname, "public");
 app.use(express.static(PUBLIC_DIR));
-app.get("/", (_req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
 
+// Optional: explicit root to index.html
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+});
+
+// 2) Chat API using OPENAI_API_KEY from Render env
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post("/api/chat", async (req, res) => {
   try {
     const messages = Array.isArray(req.body?.messages) ? req.body.messages : [];
 
-    // Force clean, structured Markdown with our heading
-    const formatSystem = {
-      role: "system",
-      content:
-        "You are CalmNest — a supportive, concise wellbeing guide. FORMAT STRICTLY IN MARKDOWN:\n" +
-        "1) Start with the heading exactly: '### calmnest.ai'.\n" +
-        "2) Then one short empathetic sentence.\n" +
-        "3) Then a section '#### What to try now' with 3–6 bullets ('- ').\n" +
-        "4) Optionally a section '#### If it gets heavier' with 1–2 short bullets.\n" +
-        "Keep it tight. No long paragraphs. No emojis. No disclaimers unless asked."
-    };
-
-    const finalMessages = [formatSystem, ...messages.filter(Boolean)];
+    const hasSystem = messages.some(m => m.role === "system");
+    const finalMessages = hasSystem
+      ? messages
+      : [{ role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }, ...messages];
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -42,14 +39,12 @@ app.post("/api/chat", async (req, res) => {
 
     const reply =
       completion.choices?.[0]?.message?.content?.trim() ||
-      "### calmnest.ai\n- Take one slow breath in and out.\n- Tell me a bit more so I can help.";
+      "Sorry, I don’t have a reply right now.";
 
     res.json({ reply });
   } catch (err) {
     console.error("OpenAI error:", err);
-    res
-      .status(500)
-      .json({ reply: "### calmnest.ai\n- I hit a server error. Try again in a moment." });
+    res.status(500).json({ reply: "Server error talking to the AI." });
   }
 });
 
