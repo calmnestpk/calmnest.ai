@@ -35,25 +35,4 @@ html, body { margin:0; padding:0; font-family: Inter, system-ui, Arial, sans-ser
 .chat-input-row { display:flex; gap:8px; margin-top:10px; }
 #chat-input { flex:1; padding:12px; border-radius:12px; border:1px solid #cfe0ff; }
 #send-btn { padding:12px 16px; border-radius:12px; border:1px solid #cfe0ff; background:#fff; cursor:pointer; }
-.disclaimer { font-size:0.82rem; color:#577; }
-
-/* System note */
-.system-note { margin:12px 0; font-size:0.95rem; opacity:0.9; }
-
-/* Modal */
-.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); align-items:center; justify-content:center; padding:10px; }
-.modal.show { display:flex; }
-.modal-card { background:#fff; padding:20px; border-radius:14px; width:min(460px, 94%); }
-.modal .row { display:flex; gap:10px; margin-top:12px; }
-.btn { padding:10px 14px; border-radius:10px; border:none; cursor:pointer; text-decoration:none; display:inline-block; background:#0b1f2a; color:#fff; }
-.btn.outline { background:#fff; border:1px solid #ddd; color:#0b1f2a; }
-.tiny { font-size:0.8rem; color:#666; margin-top:8px; }
-
-/* Corporate */
-.corp-hero { text-align:center; padding:36px 16px; background:#f7fbff; border-bottom:1px solid #e6f0ff; }
-.corp-hero p { max-width:900px; margin:0 auto; font-size:1.1rem; }
-.corp-grid { display:grid; gap:20px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); padding:24px 16px; max-width:1100px; margin:0 auto; }
-.corp-grid h3 { margin:0 0 8px; }
-.corp-grid ul { margin:0; padding-left:18px; }
-.corp-cta { text-align:center; padding:36px 16px; }
-.corp-cta h2 { margin:0 0 8px; }
+.disclaimer { font-si
