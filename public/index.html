@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CalmNest.ai</title>
-  <link rel="stylesheet" href="./style.css?v=3" />
+  <link rel="stylesheet" href="./styles.css?v=4" />
 </head>
 <body class="bg">
   <!-- Landing -->
@@ -28,9 +28,7 @@
     <section class="chat-wrap">
       <div id="chat-stream" class="chat-stream">
         <div class="chat-message bot">
-          <div class="bubble">
-            Hi! I’m CalmNest. Share what’s on your mind and I’ll guide you step by step.
-          </div>
+          <div class="bubble">Hi! I’m CalmNest. Share what’s on your mind and I’ll guide you step by step.</div>
         </div>
       </div>
 
@@ -38,12 +36,10 @@
         <input id="chat-input" placeholder="Type here…" />
         <button id="send-btn">Send</button>
       </div>
-      <p class="disclaimer">
-        Not for emergencies. If you’re at risk, contact local emergency services.
-      </p>
+      <p class="disclaimer">Not for emergencies. If you’re at risk, contact local emergency services.</p>
     </section>
 
-    <!-- Limit modal (forced hidden inline as a fallback) -->
+    <!-- Limit modal (hidden by default even if CSS fails) -->
     <div id="limit-modal" class="modal" style="display:none">
       <div class="modal-card">
         <h3>Limit reached</h3>
@@ -66,10 +62,7 @@
     </header>
 
     <section class="corp-hero">
-      <p>
-        Private, AI-guided mental health support that lives where your teams work — Slack,
-        Microsoft Teams, and email — with clinicians in the loop when it matters.
-      </p>
+      <p>Private, AI-guided mental health support that lives where your teams work — Slack, Microsoft Teams, and email — with clinicians in the loop when it matters.</p>
     </section>
 
     <section class="corp-grid">
@@ -113,6 +106,6 @@
     </section>
   </main>
 
-  <script src="theme.js"></script>
+  <script src="./theme.js"></script>
 </body>
 </html>
