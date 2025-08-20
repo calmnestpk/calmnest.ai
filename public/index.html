@@ -1,19 +1,25 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CalmNest.ai</title>
-  <link rel="stylesheet" href="/styles.css?v=6" />
-</head>
-<body class="bg">
-  <main class="landing-wrap">
-    <img src="/logo.png" alt="CalmNest" class="logo-bounce" />
-    <div class="landing-choices">
-      <a class="choice italic" href="/chat.html">I wanna talk about myself</a>
-      <a class="choice" href="/corporate.html">Corporate</a>
-    </div>
-  </main>
-  <script src="/theme.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CalmNest</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/theme.js" defer></script>
+  </head>
+  <body class="bg-sky">
+    <main class="center stage">
+      <img src="/logo.png" alt="CalmNest" class="logo-bounce" />
+      <div class="card">
+        <h1>How can we help today?</h1>
+        <div class="buttons">
+          <a class="btn primary italic" href="/chat.html">I wanna talk about myself</a>
+          <a class="btn ghost" href="/corporate.html">Corporate</a>
+        </div>
+        <p class="hint">Tap an option to continue</p>
+      </div>
+    </main>
+    <footer class="foot">© <span id="year"></span> CalmNest</footer>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </body>
 </html>
