@@ -60,7 +60,6 @@ sendBtn.addEventListener("click", () => {
   if (!input.value.trim()) return;
   appendMessage("user", input.value.trim());
   input.value = "";
-  // mock bot reply
   setTimeout(() => appendMessage("bot", "Got it. Tell me a bit more."), 500);
 });
 
