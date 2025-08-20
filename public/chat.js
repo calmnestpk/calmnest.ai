@@ -1,54 +1,93 @@
-// Chat demo with hard cap
-const MESSAGE_LIMIT = 30;
+const SEND_URL = "/api/chat";
 
-const stream = document.getElementById("chat-stream");
-const input = document.getElementById("chat-input");
-const sendBtn = document.getElementById("send-btn");
-const limitModal = document.getElementById("limit-modal");
-const closeLimit = document.getElementById("close-limit");
+const messagesEl = document.getElementById("messages");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("sendBtn");
 
-function appendMessage(role, text) {
-  const row = document.createElement("div");
-  row.className = `chat-message ${role}`;
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.innerText = text;
-  row.appendChild(bubble);
-  stream.appendChild(row);
-  stream.scrollTop = stream.scrollHeight;
-  enforceLimit();
+const state = [
+  { role: "system", content: "User starts a wellness chat." } // server injects the real system prompt
+];
+
+// --- Markdown helpers ---
+function normalizeMarkdown(md) {
+  let text = (md || "");
+  text = text
+    .replace(/(\s|^)(\d+)\.\s/g, "\n$2. ")
+    .replace(/(\s|^)[*-]\s/g, "\n- ");
+  text = text.replace(/^\s*\*\*([^*]+)\*\*\s*$/gm, "### $1");
+  text = text.replace(/\n{3,}/g, "\n\n");
+  return text.trim();
+}
+function safeMarkdownToHtml(md) {
+  const cleaned = (md || "").replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "");
+  const normalized = normalizeMarkdown(cleaned);
+  return marked.parse(normalized, { breaks: true });
 }
 
-function enforceLimit() {
-  const count = stream.querySelectorAll(".chat-message").length; // user + bot
-  if (count >= MESSAGE_LIMIT) {
-    input.disabled = true;
-    sendBtn.disabled = true;
+function addMessage(role, text) {
+  const row = document.createElement("div");
+  row.className = "message " + (role === "user" ? "user" : "bot");
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = safeMarkdownToHtml(text);
+  row.appendChild(bubble);
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return row;
+}
 
-    if (!document.getElementById("limit-note")) {
-      const note = document.createElement("div");
-      note.id = "limit-note";
-      note.className = "system-note";
-      note.innerHTML =
-        `You’ve reached today’s free support limit. For extended help, email <a href="mailto:help@calmnest.ai">help@calmnest.ai</a>.`;
-      stream.appendChild(note);
-      stream.scrollTop = stream.scrollHeight;
-    }
-    openLimitModal();
+// Typing indicator
+let typingEl = null;
+function showTyping() {
+  typingEl = document.createElement("div");
+  typingEl.className = "message bot";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  const dots = document.createElement("div");
+  dots.className = "typing";
+  dots.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  bubble.appendChild(dots);
+  typingEl.appendChild(bubble);
+  messagesEl.appendChild(typingEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+function hideTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+
+// Greeting
+addMessage("bot", "### calmnest.ai\n- What’s on your mind today?");
+
+// Send flow
+async function sendMessage() {
+  const text = (input.value || "").trim();
+  if (!text) return;
+
+  addMessage("user", text);
+  state.push({ role: "user", content: text });
+  input.value = "";
+
+  showTyping();
+  try {
+    const res = await fetch(SEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: state })
+    });
+
+    if (!res.ok) throw new Error("Bad response");
+
+    const data = await res.json().catch(() => ({}));
+    const reply = data.reply || "### calmnest.ai\n- I couldn’t get a reply just now.";
+    hideTyping();
+    addMessage("bot", reply);
+    state.push({ role: "assistant", content: reply });
+  } catch (err) {
+    console.error(err);
+    hideTyping();
+    addMessage("bot", "### calmnest.ai\n- I couldn’t reach the server. Try again in a bit.");
   }
 }
 
-function openLimitModal() { limitModal.style.display = "flex"; }
-function closeModal() { limitModal.style.display = "none"; }
-closeLimit.addEventListener("click", closeModal);
-
-sendBtn.addEventListener("click", () => {
-  if (!input.value.trim()) return;
-  appendMessage("user", input.value.trim());
-  input.value = "";
-  setTimeout(() => appendMessage("bot", "Got it. Tell me a bit more."), 400);
-});
-
+sendBtn.addEventListener("click", sendMessage);
 input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendBtn.click();
+  if (e.key === "Enter") { e.preventDefault(); sendMessage(); }
 });
