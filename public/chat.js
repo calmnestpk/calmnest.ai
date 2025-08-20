@@ -1,4 +1,4 @@
-// Frontend talks to the SAME domain (your Node service), no CORS needed
+// Talk to same-origin API
 const SEND_URL = "/api/chat";
 
 const messagesEl = document.getElementById("messages");
@@ -9,13 +9,20 @@ const state = [
   { role: "system", content: "You are CalmNest — a supportive, concise wellbeing guide." }
 ];
 
+// Render Markdown safely (strip <script> and use Marked for structure)
+function safeMarkdownToHtml(md) {
+  const cleaned = (md || "").replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "");
+  // marked is loaded via CDN in chat.html
+  return marked.parse(cleaned, { breaks: true });
+}
+
 function addMessage(role, text) {
   const row = document.createElement("div");
   row.className = "message " + (role === "user" ? "user" : "bot");
 
   const bubble = document.createElement("div");
   bubble.className = "bubble";
-  bubble.textContent = text;
+  bubble.innerHTML = safeMarkdownToHtml(text);
 
   row.appendChild(bubble);
   messagesEl.appendChild(row);
@@ -61,11 +68,7 @@ async function sendMessage() {
       body: JSON.stringify({ messages: state })
     });
 
-    if (!res.ok) {
-      hideTyping();
-      addMessage("bot", "I couldn’t reach the server. Try again in a bit.");
-      return;
-    }
+    if (!res.ok) throw new Error("Bad response");
 
     const data = await res.json().catch(() => ({}));
     const reply = data.reply || "Sorry, I don’t have a reply right now.";
@@ -75,7 +78,7 @@ async function sendMessage() {
   } catch (err) {
     console.error(err);
     hideTyping();
-    addMessage("bot", "Network issue. Please try again.");
+    addMessage("bot", "I couldn’t reach the server. Try again in a bit.");
   }
 }
 
