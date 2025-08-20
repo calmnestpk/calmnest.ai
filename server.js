@@ -9,14 +9,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 
-// Serve static files from /public
+// Serve /public
 const PUBLIC_DIR = path.join(__dirname, "public");
 app.use(express.static(PUBLIC_DIR));
-
-// Root -> index.html
-app.get("/", (_req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
-});
+app.get("/", (_req, res) => res.sendFile(path.join(PUBLIC_DIR, "index.html")));
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -24,15 +20,15 @@ app.post("/api/chat", async (req, res) => {
   try {
     const messages = Array.isArray(req.body?.messages) ? req.body.messages : [];
 
-    // Strong formatting instruction so replies come as headings + bullets
+    // Force clean, structured Markdown with our heading
     const formatSystem = {
       role: "system",
       content:
         "You are CalmNest — a supportive, concise wellbeing guide. FORMAT STRICTLY IN MARKDOWN:\n" +
-        "1) Start with a one-line heading like '### Quick support'.\n" +
-        "2) Then a short empathetic line (one sentence max).\n" +
-        "3) Then a section '#### What to try now' with 3–6 bullet points (use '-' bullets).\n" +
-        "4) If useful, add '#### If it gets heavier' with 1–2 brief bullets.\n" +
+        "1) Start with the heading exactly: '### calmnest.ai'.\n" +
+        "2) Then one short empathetic sentence.\n" +
+        "3) Then a section '#### What to try now' with 3–6 bullets ('- ').\n" +
+        "4) Optionally a section '#### If it gets heavier' with 1–2 short bullets.\n" +
         "Keep it tight. No long paragraphs. No emojis. No disclaimers unless asked."
     };
 
@@ -46,14 +42,14 @@ app.post("/api/chat", async (req, res) => {
 
     const reply =
       completion.choices?.[0]?.message?.content?.trim() ||
-      "### Quick support\n- Take one slow breath in and out.\n- Tell me a bit more so I can help.";
+      "### calmnest.ai\n- Take one slow breath in and out.\n- Tell me a bit more so I can help.";
 
     res.json({ reply });
   } catch (err) {
     console.error("OpenAI error:", err);
     res
       .status(500)
-      .json({ reply: "### Quick support\n- I hit a server error. Try again in a moment." });
+      .json({ reply: "### calmnest.ai\n- I hit a server error. Try again in a moment." });
   }
 });
 
