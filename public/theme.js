@@ -1,8 +1,16 @@
-// Auto-theme from the logo's average color
-(function () {
-  const root = document.documentElement;
-  const candidates = ["/logo.jpg", "/logo.jpeg", "/logo.png"];
+// theme.js — lock site colors to the CalmNest logo blue
 
+(function () {
+  // Exact background blue from your logo
+  const BASE_HEX = "#A7EBF8";
+
+  const root = document.documentElement;
+
+  function hexToRgb(hex) {
+    const m = hex.replace("#", "").match(/^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+    if (!m) return { r: 167, g: 235, b: 248 }; // fallback to #A7EBF8
+    return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
+  }
   function rgbToHsl(r, g, b) {
     r /= 255; g /= 255; b /= 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
@@ -30,46 +38,17 @@
     return `#${f(0)}${f(8)}${f(4)}`;
   }
 
-  function applyTheme(r, g, b) {
-    const { h, s, l } = rgbToHsl(r, g, b);
-    // Soft background based on logo blue
-    const skyBase = hslToHex(h, Math.min(0.55, s * 0.85), Math.min(0.92, l * 1.25));
-    // Primary brand a bit darker/richer
-    const brand = hslToHex(h, Math.min(0.9, s * 1.1), Math.max(0.35, l * 0.7));
-    const brandInk = hslToHex(h, Math.min(0.9, s * 1.1), Math.max(0.22, l * 0.38));
+  const { r, g, b } = hexToRgb(BASE_HEX);
+  const { h, s, l } = rgbToHsl(r, g, b);
 
-    root.style.setProperty("--sky-base", skyBase);
-    root.style.setProperty("--brand", brand);
-    root.style.setProperty("--brand-ink", brandInk);
-  }
+  // Derived shades:
+  const skyBase  = BASE_HEX;                                              // background base
+  const skyLight = hslToHex(h, Math.min(0.45, s * 0.6), Math.min(0.95, l * 1.05)); // gradient blend
+  const brand    = hslToHex(h, Math.min(0.9,  s * 1.15), Math.max(0.40, l * 0.65)); // primary button
+  const brandInk = hslToHex(h, Math.min(0.9,  s * 1.15), Math.max(0.24, l * 0.42)); // dark text on brand
 
-  function sample(img) {
-    try {
-      const c = document.createElement("canvas");
-      const w = c.width = 48, h = c.height = 48;
-      const ctx = c.getContext("2d");
-      ctx.drawImage(img, 0, 0, w, h);
-      const data = ctx.getImageData(0, 0, w, h).data;
-
-      let r = 0, g = 0, b = 0, n = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        const rr = data[i], gg = data[i + 1], bb = data[i + 2], a = data[i + 3];
-        if (a < 16) continue;                           // ignore transparent
-        const mx = Math.max(rr, gg, bb), mn = Math.min(rr, gg, bb);
-        const light = (mx + mn) / 510;
-        if (light > 0.95 || light < 0.06) continue;     // ignore very light/dark
-        r += rr; g += gg; b += bb; n++;
-      }
-      if (n > 0) applyTheme(r / n, g / n, b / n);
-    } catch {}
-  }
-
-  (function tryLoad() {
-    const src = candidates.shift();
-    if (!src) return;
-    const img = new Image();
-    img.onload = () => sample(img);
-    img.onerror = tryLoad;
-    img.src = src;
-  })();
+  root.style.setProperty("--sky-base", skyBase);
+  root.style.setProperty("--sky", skyLight);
+  root.style.setProperty("--brand", brand);
+  root.style.setProperty("--brand-ink", brandInk);
 })();
